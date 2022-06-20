@@ -460,7 +460,7 @@ bool CrashRecoveryContext::throwIfCrash(int RetCode) {
   if (RetCode <= 128)
     return false;
   llvm::sys::unregisterHandlers();
-  raise(RetCode - 128);
+  // raise(RetCode - 128);
 #endif
   return true;
 }
