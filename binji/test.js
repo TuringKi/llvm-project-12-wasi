@@ -527,7 +527,7 @@ profile("total time", () => {
       "-cc1",
 
       '-triple', 'wasm32-unknown-wasi',
-      "-emit-obj",
+      "-emit-llvm",
       // '-E',
       // '-S',
       // '-main-file-name', input, '-mrelocation-model', 'static',
@@ -557,7 +557,12 @@ profile("total time", () => {
       input
     );
 
-    if (true) {
+    const fobj = memfs.getFileContents(obj);
+    var str = String.fromCharCode.apply(null, fobj);
+
+    print(str);
+
+    if (false) {
       new App(
         lld,
         memfs,
@@ -573,7 +578,7 @@ profile("total time", () => {
     }
   });
 
-  if (true) {
+  if (false) {
     const test = getModuleFromBuffer(memfs.getFileContents(wasm));
     new App(test, memfs, "test");
   }
