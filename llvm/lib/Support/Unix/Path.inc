@@ -718,7 +718,8 @@ std::error_code mapped_file_region::init(int FD, uint64_t Offset,
   }
 #endif // #if defined (__APPLE__)
 
-  return std::error_code();
+  errno = EINVAL;
+  return std::error_code(errno, std::generic_category());
 }
 
 mapped_file_region::mapped_file_region(int fd, mapmode mode, size_t length,
