@@ -42,9 +42,10 @@ CXX="${WASI_SDK_PATH}/bin//clang++ --sysroot=${WASI_SDK_PATH}/share/wasi-sysroot
 cmake -GNinja -Bbuild-wasm \
 -DCMAKE_CXX_FLAGS="-D_WASI_EMULATED_SIGNAL -D__LLVM_CUSTOM_WASI__" \
 	-DCMAKE_INSTALL_PREFIX=`pwd`/build-wasm/install/ \
-  -DLLVM_ENABLE_PROJECTS="clang;lld;clang-tools-extra" \
+  -DLLVM_ENABLE_PROJECTS="clang;lld;clang-tools-extra;clangd" \
    -DMLIR_ENABLE_BINDINGS_PYTHON=ON \
   -DLLVM_TARGETS_TO_BUILD="WebAssembly;NVPTX;X86;RISCV;AMDGPU" \
+    -DCMAKE_EXE_LINKER_FLAGS="-Wl,--initial-memory=1073741824  -Wl,-zstack-size=536870912" \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
 -DCMAKE_C_COMPILER_LAUNCHER=ccache \
 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
