@@ -45,7 +45,7 @@ cmake -GNinja -Bbuild-wasm \
   -DLLVM_ENABLE_PROJECTS="clang;lld;clang-tools-extra;clangd" \
    -DMLIR_ENABLE_BINDINGS_PYTHON=ON \
   -DLLVM_TARGETS_TO_BUILD="WebAssembly;NVPTX;X86;RISCV;AMDGPU" \
-    -DCMAKE_EXE_LINKER_FLAGS="-Wl,--initial-memory=1073741824  -Wl,-zstack-size=536870912" \
+       -DCMAKE_EXE_LINKER_FLAGS=" -Wl,-zstack-size=536870912 -Wl,-strip-all" \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
 -DCMAKE_C_COMPILER_LAUNCHER=ccache \
 -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
