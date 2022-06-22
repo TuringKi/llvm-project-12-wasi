@@ -4,7 +4,7 @@
 
 [Webassembly](https://webassembly.org/) (wasm)是一种栈式虚拟机的指令集。目前，wasm 1.0版本已经被多个主流的浏览器支持。llvm 从8.0开始支持wasm的代码生成（codegen）：可以将c家族的代码编译、链接为wasm字节码，并在实现了wasm指令集的浏览器或相关的虚拟机上运行。
 
-**[W**eb**A**ssembly **S**ystem **I**nterface (wasi)](https://wasi.dev/) 是一套基于沙箱机制的系统接口。[Lin Clark](https://twitter.com/linclark) 的[相关博客](https://hacks.mozilla.org/2019/03/standardizing-wasi-a-webassembly-system-interface/)对此做了详细的介绍。笼统地说，wasi允许将常用的系统接口（比如pread, seek）作为extern sysmbol暴露出来，具体实现交给wasm虚拟机外部程序，由虚拟机的实现者负责调配。这即保证了接口的规范，同时兼顾了安全性。以node.js为例，
+**[W**eb**A**ssembly **S**ystem **I**nterface (wasi)](https://wasi.dev/) 是一套基于沙箱机制的系统接口。[Lin Clark](https://twitter.com/linclark) 的[相关博客](https://hacks.mozilla.org/2019/03/standardizing-wasi-a-webassembly-system-interface/)对此做了详细的介绍。笼统地说，wasi允许将常用的系统接口（比如pread, seek）作为extern symbols 暴露出来，具体实现交给wasm虚拟机外部程序，由虚拟机的实现者负责调配。这即保证了接口的规范，同时兼顾了安全性。以node.js为例，
 
 ```jsx
 const wasm_module = new WebAssembly.Instance(wasm_file_buffer,
