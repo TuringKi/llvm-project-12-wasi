@@ -31,7 +31,7 @@ https://github.com/WebAssembly/wasi-sdk 提供了完整的支持。你可以参�
 
 编译出wasi-sdk后，你还需要llvm 12版本的本地clang-tblgen和llvm-tblgen，用来将.td文件中的定义转译为c++源文件。它们的编译可以参考llvm生成的官方文档。
 
-**注意：***你不能在本工程生成clang-tblgen和llvm-tblgen，因为Support/Unix 下的文件是修改过的，它无法在本地编译通过。*
+**注意**：*你不能在本工程生成clang-tblgen和llvm-tblgen，因为Support/Unix 下的文件是修改过的，它无法在本地编译通过。*
 
 完成上述步骤后，在本工程的根目录执行如下的构建命令：
 
