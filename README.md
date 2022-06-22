@@ -27,7 +27,7 @@ https://github.com/WebAssembly/wasi-libc 实现了部分POSIX c接口，包括�
 
 https://github.com/WebAssembly/wasi-sdk 提供了完整的支持。你可以参考它的文档。
 
-**注意**：*由于llvm-libcxx中并不支持thread，你需要做一个假的放进去，可以参考这个https://github.com/binji/wasi-sdk/commit/b6e735e9968ddfecfdc49bc72ba5aed7bb83c600。*
+**注意**：*由于wasi并不支持thread，你需要做一个假的放进去，可以参考这个https://github.com/binji/wasi-sdk/commit/b6e735e9968ddfecfdc49bc72ba5aed7bb83c600。*
 
 编译出wasi-sdk后，你还需要llvm 12版本的本地clang-tblgen和llvm-tblgen，用来将.td文件中的定义转译为c++源文件。它们的编译可以参考llvm生成的官方文档。
 
