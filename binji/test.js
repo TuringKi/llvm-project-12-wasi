@@ -40,14 +40,14 @@ function assert(cond) {
 }
 
 function profile(name, f) {
-  const start = performance.now();
+  //const start = performance.now();
   try {
     return f();
   } catch (exn) {
     throw exn;
   } finally {
-    const time = performance.now() - start;
-    print(`|| ${name} took ${time.toFixed(2)}ms`);
+    //   const time = performance.now() - start;
+    // print(`|| ${name} took ${time.toFixed(2)}ms`);
   }
 }
 
@@ -143,7 +143,7 @@ class Memory {
     } else {
       const dst = new Uint8Array(this.buffer, o, buf.length);
       dst.set(buf);
-     // print("$$$$$$$$$$$$$$$$$$$$$$",buf.length);
+      // print("$$$$$$$$$$$$$$$$$$$$$$",buf.length);
       return buf.length;
     }
   }
@@ -246,7 +246,7 @@ class MemFS {
       str += this.hostMem_.readStr(buf, len);
       size += len;
     }
-   // print("***********************",size);
+    // print("***********************",size);
     this.hostMem_.write32(nwritten_out, size);
     this.hostWriteBuffer.write(str);
     return ESUCCESS;
@@ -275,11 +275,11 @@ class MemFS {
 
   copy_in(memfs_dst, clang_src, size) {
     this.mem.check();
-   
+
     const dst = new Uint8Array(this.mem.buffer, memfs_dst, size);
     this.hostMem_.check();
     const src = new Uint8Array(this.hostMem_.buffer, clang_src, size);
-   // print(`copy_in(${memfs_dst.toString(16)}, ${clang_src.toString(16)}, ${size})`);
+    // print(`copy_in(${memfs_dst.toString(16)}, ${clang_src.toString(16)}, ${size})`);
     dst.set(src);
   }
 }
@@ -488,30 +488,31 @@ function dump(buf) {
 profile("total time", () => {
   const input = "test.cc";
   const contents = `
-      #include <stdio.h>
-      int main(){printf("hello mx!\\n");}
+      #include <type_traits>
+      #include <iostream>
+      int main(){std::cout<<"hello mx!\\n";}
       `;
 
   const memfs = new MemFS();
   memfs.addFile(input, contents);
 
-    profile("untar", () => {
-      const tar = new Tar("sysroot.tar");
-      let entry;
-      while ((entry = tar.readEntry())) {
-        switch (entry.type) {
-          case "0": // Regular file.
-            memfs.addFile(entry.filename, entry.contents);
-            break;
-          case "5":
-            memfs.addDirectory(entry.filename);
-            break;
-        }
+  profile("untar", () => {
+    const tar = new Tar("sysroot.tar");
+    let entry;
+    while ((entry = tar.readEntry())) {
+      switch (entry.type) {
+        case "0": // Regular file.
+          memfs.addFile(entry.filename, entry.contents);
+          break;
+        case "5":
+          memfs.addDirectory(entry.filename);
+          break;
       }
-    });
+    }
+  });
 
   const clang = getModuleFromFile("clang");
-   const lld = getModuleFromFile('lld');
+  const lld = getModuleFromFile("lld");
 
   const wasm = "test";
 
@@ -526,8 +527,9 @@ profile("total time", () => {
       "clang",
       "-cc1",
 
-      '-triple', 'wasm32-unknown-wasi',
-      "-emit-llvm",
+      "-triple",
+      "wasm32-unknown-wasi",
+      "-emit-obj",
       // '-E',
       // '-S',
       // '-main-file-name', input, '-mrelocation-model', 'static',
@@ -535,17 +537,17 @@ profile("total time", () => {
       // '-fuse-init-array', '-target-cpu', 'generic', '-fvisibility',
       // 'hidden', '-momit-leaf-frame-pointer', '-resource-dir',
       // '/lib/clang/8.0.1',
-        "-isysroot",
-        "/",
-        "-internal-isystem",
-        "/include/c++/v1",
-        "-internal-isystem",
-        "/include",
-        "-internal-isystem",
-        "/lib/clang/12.0.1/include",
+      "-isysroot",
+      "/",
+      "-internal-isystem",
+      "/include/c++/v1",
+      "-internal-isystem",
+      "/include",
+      "-internal-isystem",
+      "/lib/clang/12.0.1/include",
 
       // '-fdebug-compilation-dir', '/',
-      '-O2',
+      "-O2",
       "-ferror-limit",
       "19",
       "-fmessage-length=50",
@@ -557,28 +559,32 @@ profile("total time", () => {
       input
     );
 
-    const fobj = memfs.getFileContents(obj);
-    var str = String.fromCharCode.apply(null, fobj);
+    //const fobj = memfs.getFileContents(obj);
+    // var str = String.fromCharCode.apply(null, fobj);
 
-    print(str);
+    // print(str);
 
-    if (false) {
+    if (true) {
       new App(
         lld,
         memfs,
         "wasm-ld",
-      //  "--no-threads",
+        //  "--no-threads",
         `-L${libdir}`,
         crt1,
         obj,
         "-lc",
+        "-lc++",
+        "-lc++abi",
+        "-lwasi-emulated-signal",
+        "-lclang_rt.builtins-wasm32",
         "-o",
         wasm
       );
     }
   });
 
-  if (false) {
+  if (true) {
     const test = getModuleFromBuffer(memfs.getFileContents(wasm));
     new App(test, memfs, "test");
   }
